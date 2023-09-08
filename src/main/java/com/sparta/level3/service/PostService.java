@@ -1,14 +1,18 @@
 package com.sparta.level3.service;///
 
+import com.sparta.level3.dto.CommentResponseDto;
 import com.sparta.level3.dto.DeleteReponseDto;
 import com.sparta.level3.dto.PostRequestDto;
 import com.sparta.level3.dto.PostResponseDto;
+import com.sparta.level3.entity.Comment;
 import com.sparta.level3.entity.Post;
 import com.sparta.level3.entity.User;
 import com.sparta.level3.jwt.JwtUtil;
+import com.sparta.level3.repository.CommentRepository;
 import com.sparta.level3.repository.PostRepository;
 import com.sparta.level3.repository.UserRepository;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.lang.Collections;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +26,7 @@ import java.util.List;
 public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final CommentRepository commentRepository;
     private final JwtUtil jwtUtil;
 
     // 1. 토큰 있는 경우에만 게시글 생성
@@ -56,23 +61,39 @@ public class PostService {
     }
     // 2. 게시글 전체 목록 조회
     @Transactional
-    public List<PostResponseDto> getPostList(){
-        List<Post> postList = postRepository.findAllByOrderByModifiedAtDesc();
-        List<PostResponseDto> responseDto = new ArrayList<>();
+    public List<PostResponseDto> getPostList() {
+        List<Post> posts = postRepository.findAllByOrderByModifiedAtDesc(); // List<Post> 꺼내오기
+        if(Collections.isEmpty(posts)) return null;
+        List<PostResponseDto> results = new ArrayList<>(); // List<PostResponseDto> 빈통 만들기 (주연)
 
-        for (Post post : postList) {
-            responseDto.add(new PostResponseDto(post));
+        for(Post post : posts) {
+            List<Comment> comments = commentRepository.findAllByPosts(post); // List<Comment> 꺼내오기 (코멘트 조연)
+            PostResponseDto postResponseDto = new PostResponseDto(post); // PostResponseDto 빈통 만들기 (조연)
+            List<CommentResponseDto> commentResponseDtos = new ArrayList<>(); // List<CommentResponseDto> 빈통 만들기(코멘트 주연)
+            for (Comment comment : comments) {
+                commentResponseDtos.add(new CommentResponseDto(comment)); // List<CommentResponseDto>에 CommnetResponseDto를 add하기
+            }
+            postResponseDto.setCommentList(commentResponseDtos); // postResponseDto 에 CommentList 세팅하기
+            results.add(postResponseDto); // List<PostResponseDto> 에 postResponseDto를 add 하기
         }
-        return responseDto;
+        return results;
     }
 
     // 3. 선택한 게시글 조회 -> 예외처리("게시글이 존재하지 않습니다")
     @Transactional
     public PostResponseDto getPost(Long id) {
-        Post post = postRepository.findById(id).orElseThrow(
+        Post post = postRepository.findById(id).orElseThrow( // Post 꺼내오기
                 () -> new IllegalArgumentException("게시글이 존재하지 않습니다.")
         );
-        return new PostResponseDto(post);
+        PostResponseDto postDto = new PostResponseDto(post); // PostResponseDto 빈통 만들기 (주연)
+
+        List<Comment> comments = commentRepository.findAllByPosts(post);
+        List<CommentResponseDto> commentResponseDtos = new ArrayList<>();
+        for (Comment comment : comments) {
+            commentResponseDtos.add(new CommentResponseDto(comment));
+        }
+        postDto.setCommentList(commentResponseDtos);
+        return postDto;
     }
 
     // 4. 선택한 게시글 수정 -> ("아이디가 존재하지 않습니다")

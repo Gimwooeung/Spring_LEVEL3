@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,6 +19,7 @@ public class PostResponseDto {
 	private String username;
 	private LocalDateTime createdAt;
 	private LocalDateTime modifiedAt;
+	private List<CommentResponseDto> commentList;
 
 	public PostResponseDto (Post post) {
 		this.id = post.getId();
