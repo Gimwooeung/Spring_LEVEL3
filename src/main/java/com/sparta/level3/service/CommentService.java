@@ -63,7 +63,7 @@ public class CommentService {
     public CommentResponseDto update(Long id, CommentRequestDto requestDto, HttpServletRequest request) {
         String token = jwtUtil.resolveToken(request);
         Claims claims;
-
+        // 사용자의 정보 가져오기. request에서 Token가져오기
         if (token != null) {
             // 토큰 검증
             if (jwtUtil.validateToken(token)) {
@@ -77,6 +77,7 @@ public class CommentService {
             Comment comment = commentRepository.findById(id).orElseThrow(
                     () -> new IllegalArgumentException("로그인 해주세요")
             );
+
             comment.update(requestDto);
             return new CommentResponseDto(comment);
         } else {
@@ -89,7 +90,7 @@ public class CommentService {
     public CommentDeleteDto delete(Long id, HttpServletRequest request) {
         String token = jwtUtil.resolveToken(request);
         Claims claims;
-
+        // 사용자의 정보 가져오기. request에서 Token가져오기
         if (token != null) {
             // 토큰 검증
             if (jwtUtil.validateToken(token)) {

@@ -1,5 +1,4 @@
-package com.sparta.level3.dto;///
-
+package com.sparta.level3.dto;
 
 import com.sparta.level3.entity.Post;
 import lombok.Getter;

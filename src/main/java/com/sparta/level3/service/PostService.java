@@ -1,4 +1,4 @@
-package com.sparta.level3.service;///
+package com.sparta.level3.service;
 
 import com.sparta.level3.dto.CommentResponseDto;
 import com.sparta.level3.dto.DeleteReponseDto;
@@ -62,19 +62,19 @@ public class PostService {
     // 2. 게시글 전체 목록 조회
     @Transactional
     public List<PostResponseDto> getPostList() {
-        List<Post> posts = postRepository.findAllByOrderByModifiedAtDesc(); // List<Post> 꺼내오기
+        List<Post> posts = postRepository.findAllByOrderByModifiedAtDesc();
         if(Collections.isEmpty(posts)) return null;
-        List<PostResponseDto> results = new ArrayList<>(); // List<PostResponseDto> 빈통 만들기 (주연)
+        List<PostResponseDto> results = new ArrayList<>();
 
         for(Post post : posts) {
-            List<Comment> comments = commentRepository.findAllByPosts(post); // List<Comment> 꺼내오기 (코멘트 조연)
-            PostResponseDto postResponseDto = new PostResponseDto(post); // PostResponseDto 빈통 만들기 (조연)
-            List<CommentResponseDto> commentResponseDtos = new ArrayList<>(); // List<CommentResponseDto> 빈통 만들기(코멘트 주연)
+            List<Comment> comments = commentRepository.findAllByPosts(post);
+            PostResponseDto postResponseDto = new PostResponseDto(post);
+            List<CommentResponseDto> commentResponseDtos = new ArrayList<>();
             for (Comment comment : comments) {
-                commentResponseDtos.add(new CommentResponseDto(comment)); // List<CommentResponseDto>에 CommnetResponseDto를 add하기
+                commentResponseDtos.add(new CommentResponseDto(comment));
             }
-            postResponseDto.setCommentList(commentResponseDtos); // postResponseDto 에 CommentList 세팅하기
-            results.add(postResponseDto); // List<PostResponseDto> 에 postResponseDto를 add 하기
+            postResponseDto.setCommentList(commentResponseDtos);
+            results.add(postResponseDto);
         }
         return results;
     }
@@ -98,10 +98,10 @@ public class PostService {
 
     // 4. 선택한 게시글 수정 -> ("아이디가 존재하지 않습니다")
     @Transactional
-    public PostResponseDto update(Long Id, PostRequestDto requestDto, HttpServletRequest request) {
+    public PostResponseDto update(Long id, PostRequestDto requestDto, HttpServletRequest request) {
         String token = jwtUtil.resolveToken(request);
         Claims claims;
-
+        // 사용자의 정보 가져오기. request에서 Token가져오기
         if (token != null) {
             // 토큰 검증
             if (jwtUtil.validateToken(token)) {
@@ -115,7 +115,7 @@ public class PostService {
             User user = userRepository.findByUsername(claims.getSubject()).orElseThrow(
                     () -> new IllegalArgumentException("로그인 해주세요")
             );
-            Post post = postRepository.findById(Id).orElseThrow(
+            Post post = postRepository.findById(id).orElseThrow(
                     () -> new IllegalArgumentException("해당 게시물이 존재하지 않습니다.")
             );
 
@@ -133,10 +133,10 @@ public class PostService {
 
     // 5. 선택한 게시글 삭제
     @Transactional
-    public DeleteReponseDto delete(Long Id, HttpServletRequest request) {
+    public DeleteReponseDto delete(Long id, HttpServletRequest request) {
         String token = jwtUtil.resolveToken(request);
         Claims claims;
-        //토큰 확인
+        // 사용자의 정보 가져오기. request에서 Token가져오기
         if (token != null) {
             // 토큰 검증
             if (jwtUtil.validateToken(token)) {
@@ -151,7 +151,7 @@ public class PostService {
             );
 
             //조회
-            Post post = postRepository.findById(Id).orElseThrow(
+            Post post = postRepository.findById(id).orElseThrow(
                     () -> new IllegalArgumentException("해당 게시물이 존재하지 않습니다.")
             );
 
@@ -160,7 +160,7 @@ public class PostService {
             }
 
             //삭제
-            postRepository.deleteById(Id);
+            postRepository.deleteById(id);
             return new DeleteReponseDto("게시글 삭제 성공",200);
         }
         return null;
