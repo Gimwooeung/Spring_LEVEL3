@@ -28,7 +28,10 @@ public class User {
     private UserRoleEnum role;
 
     @OneToMany(mappedBy = "user")
-    private final List<Post> postList = new ArrayList<>();
+    private final List<Post> posts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private final List<Comment> commentList = new ArrayList<>();
 
     public User(String username, String password, UserRoleEnum role) {
         this.username = username;
@@ -36,4 +39,3 @@ public class User {
         this.role = role;
     }
 }
-

@@ -22,7 +22,7 @@ public class PostResponseDto {
 	public PostResponseDto (Post post) {
 		this.id = post.getId();
 		this.title = post.getTitle();
-		this.content = post.getContents();
+		this.content = post.getContent();
 		this.username = post.getUsername();
 		this.createdAt = post.getCreatedAt();
 		this.modifiedAt = post.getModifiedAt();
