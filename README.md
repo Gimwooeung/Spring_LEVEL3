@@ -4,7 +4,8 @@
 1번 ERD
 ![LEVEL3 ERD](https://github.com/Gimwooeung/Spring_LEVEL3/assets/132888708/a833638d-b775-41ea-affd-f42a92a3bb15)
 2번 ERD
-![LEVEL3 ERD](https://github.com/Gimwooeung/Spring_LEVEL3/assets/132888708/ef0d7c83-97d1-450e-9351-9b6b3778de59)
+![LEVEL3 ERD(2)](https://github.com/Gimwooeung/Spring_LEVEL3/assets/132888708/a384da0e-177d-4d97-887d-1794e04a2582)
+
 
 # API 명세서
 https://wooeung.com/%ed%95%ad%ed%95%b4-16%ea%b8%b0-til-18%ec%9d%bc%ec%b0%a8-today-i-learned/ 명세서 부분 참고
