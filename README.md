@@ -1,10 +1,7 @@
 # Spring_LEVEL3 (1)게시글 작성 (2)회원가입+로그인 *(3)댓글작성
 
 # ERD
-1번 ERD
 ![LEVEL3 ERD](https://github.com/Gimwooeung/Spring_LEVEL3/assets/132888708/a833638d-b775-41ea-affd-f42a92a3bb15)
-2번 ERD
-![LEVEL3 ERD(2)](https://github.com/Gimwooeung/Spring_LEVEL3/assets/132888708/a384da0e-177d-4d97-887d-1794e04a2582)
 
 
 # API 명세서
