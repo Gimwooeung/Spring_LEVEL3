@@ -28,7 +28,7 @@ public class Post extends Timestamped {
 	private String content;
 
 
-	@OneToMany(mappedBy = "posts")
+	@OneToMany(mappedBy = "posts", cascade = CascadeType.REMOVE)
 	private List<Comment> commentList = new ArrayList<>();
 
 	@ManyToOne
